@@ -438,6 +438,20 @@
     }
   </style>
 
+  <!-- Splash Screen for First Load -->
+  <div id="splash_screen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #70e1fd, #00a2ff); z-index: 9999; font-family: 'baloo 2', ubuntu, verdana, sans-serif;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+      <h1 style="font-size: 72px; color: #fff; text-shadow: 3px 3px 6px rgba(0,0,0,0.3); margin-bottom: 40px; font-weight: 800;">Drive Mad</h1>
+      <button id="splash_play_button" style="display: inline-block; border: 3px solid #000; border-radius: 12px; width: 220px; height: 60px; font-size: 24px; font-weight: bold; background-color: #fff; color: #333; cursor: pointer; font-family: 'baloo 2', ubuntu, verdana, sans-serif; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: all 0.3s;">
+        Play
+      </button>
+      <div style="margin-top: 50px; color: #fff; font-size: 16px; line-height: 1.8;">
+        <p style="margin: 5px 0;">Code by <a href="https://codepen.io/Grayson-Brown/pen/pvgejad" target="_blank" style="color: #fff; text-decoration: underline;">Grayson Brown</a></p>
+        <p style="margin: 5px 0;">Published and modified by <a href="https://github.com/Mrowinski-Thorge" target="_blank" style="color: #fff; text-decoration: underline;">Mrowinski-Thorge</a></p>
+      </div>
+    </div>
+  </div>
+
   <div id="modal_parent">
     <div id="modal_content">
       <span id="modal_close_button">&times;</span>
@@ -464,6 +478,48 @@
     <div id="webview_content"></div>
   </div>
   <script type="text/javascript">
+    // Service Worker Registration for Offline Support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, function(err) {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+
+    // Splash Screen Logic
+    window.addEventListener('load', function() {
+      const splashScreen = document.getElementById('splash_screen');
+      const splashPlayButton = document.getElementById('splash_play_button');
+      const hasVisitedBefore = localStorage.getItem('driveMadVisited');
+
+      if (!hasVisitedBefore) {
+        // First visit - show splash screen
+        splashScreen.style.display = 'block';
+
+        splashPlayButton.addEventListener('click', function() {
+          splashScreen.style.display = 'none';
+          localStorage.setItem('driveMadVisited', 'true');
+        });
+
+        // Add hover effect
+        splashPlayButton.addEventListener('mouseenter', function() {
+          this.style.transform = 'scale(1.05)';
+          this.style.backgroundColor = '#f0f0f0';
+        });
+        splashPlayButton.addEventListener('mouseleave', function() {
+          this.style.transform = 'scale(1)';
+          this.style.backgroundColor = '#fff';
+        });
+      } else {
+        // Subsequent visits - skip splash screen
+        splashScreen.style.display = 'none';
+      }
+    });
+
     var pokiDebug = false;
     var postRunDone = false;
     var theDomLoaded = false;
