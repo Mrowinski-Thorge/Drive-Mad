@@ -1,6 +1,7 @@
 The MIT License (MIT)
 
 Copyright (c) 2026 Grayson Brown (https://codepen.io/Grayson-Brown/pen/pvgejad)
+Modified and published by Mrowinski-Thorge (https://github.com/Mrowinski-Thorge)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
